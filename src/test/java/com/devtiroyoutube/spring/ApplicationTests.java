@@ -1,4 +1,4 @@
-package com.codewithmosh.Spring;
+package com.devtiroyoutube.spring;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
