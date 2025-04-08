@@ -1,7 +1,6 @@
-package com.devtiroyoutube.spring.dao;
+package com.devtiroyoutube.spring.repositories;
 
 import com.devtiroyoutube.spring.TestDataUtil;
-import com.devtiroyoutube.spring.dao.impl.AuthorDaoImpl;
 import com.devtiroyoutube.spring.domain.Author;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,20 +17,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class AuthorDaoImplIntegrationTests {
+public class AuthorRepositoryIntegrationTests {
 
-    private final AuthorDaoImpl underTest;
+    private final AuthorRepository underTest;
 
     @Autowired
-    public AuthorDaoImplIntegrationTests(AuthorDaoImpl underTest) {
+    public AuthorRepositoryIntegrationTests(AuthorRepository underTest) {
         this.underTest = underTest;
     }
 
     @Test
     public void testThatAuthorCanBeCreatedAndRecalled(){
         Author author = TestDataUtil.createTestAuthorA();
-        underTest.create(author);
-        Optional<Author> result = underTest.findOne(author.getId());
+        underTest.save(author);
+        Optional<Author> result = underTest.findById(author.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(author);
     }
@@ -41,11 +40,11 @@ public class AuthorDaoImplIntegrationTests {
         Author authorA = TestDataUtil.createTestAuthorA();
         Author authorB = TestDataUtil.createTestAuthorB();
         Author authorC = TestDataUtil.createTestAuthorC();
-        underTest.create(authorA);
-        underTest.create(authorB);
-        underTest.create(authorC);
+        underTest.save(authorA);
+        underTest.save(authorB);
+        underTest.save(authorC);
 
-        List<Author> authors = underTest.find();
+        Iterable<Author> authors = underTest.findAll();
         assertThat(authors)
                 .hasSize(3)
                 .contains(authorA,authorB,authorC);
@@ -54,11 +53,11 @@ public class AuthorDaoImplIntegrationTests {
     @Test
     public void testThatAuthorCanBeUpdated(){
         Author author = TestDataUtil.createTestAuthorA();
-        underTest.create(author);
+        underTest.save(author);
 
         author.setName("Updated");
-        underTest.update(author.getId(), author);
-        Optional<Author> result = underTest.findOne(author.getId());
+        underTest.save(author);
+        Optional<Author> result = underTest.findById(author.getId());
 
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(author);
@@ -67,10 +66,38 @@ public class AuthorDaoImplIntegrationTests {
     @Test
     public void testThatAuthorCanBeDeleted(){
         Author author = TestDataUtil.createTestAuthorA();
-        underTest.create(author);
-        underTest.delete(author.getId());
-        Optional<Author> result = underTest.findOne(author.getId());
+        underTest.save(author);
+        underTest.deleteById(author.getId());
+        Optional<Author> result = underTest.findById(author.getId());
 
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void testThatGetAuthorsWithAgeLessThan(){
+        Author authorA = TestDataUtil.createTestAuthorA();
+        Author authorB = TestDataUtil.createTestAuthorB();
+        Author authorC = TestDataUtil.createTestAuthorC();
+
+        underTest.save(authorA);
+        underTest.save(authorB);
+        underTest.save(authorC);
+
+       Iterable<Author> result = underTest.ageLessThan(80);
+       assertThat(result).containsExactly(authorB,authorC);
+    }
+
+    @Test
+    public void testThatGetAuthorsWithAgeGreaterThan(){
+        Author authorA = TestDataUtil.createTestAuthorA();
+        Author authorB = TestDataUtil.createTestAuthorB();
+        Author authorC = TestDataUtil.createTestAuthorC();
+
+        underTest.save(authorA);
+        underTest.save(authorB);
+        underTest.save(authorC);
+
+        Iterable<Author> result = underTest.findAuthorsWithAgeGreaterThan(80);
+        assertThat(result).containsExactly(authorA);
     }
 }
