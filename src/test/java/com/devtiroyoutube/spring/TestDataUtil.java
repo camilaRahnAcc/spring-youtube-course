@@ -1,5 +1,7 @@
 package com.devtiroyoutube.spring;
 
+import com.devtiroyoutube.spring.domain.dto.AuthorDto;
+import com.devtiroyoutube.spring.domain.dto.BookDto;
 import com.devtiroyoutube.spring.domain.entities.AuthorEntity;
 import com.devtiroyoutube.spring.domain.entities.BookEntity;
 
@@ -7,8 +9,15 @@ public final class TestDataUtil {
     private TestDataUtil(){
     }
 
-    public static AuthorEntity createTestAuthorA() {
+    public static AuthorEntity createTestAuthorEntityA() {
         return AuthorEntity.builder()
+                .name("aaa")
+                .age(85)
+                .build();
+    }
+
+    public static AuthorDto createTestAuthorDtoA() {
+        return AuthorDto.builder()
                 .name("aaa")
                 .age(85)
                 .build();
@@ -28,11 +37,19 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static BookEntity createTestBookA(final AuthorEntity authorEntity) {
+    public static BookEntity createTestBookEntityA(final AuthorEntity authorEntity) {
         return BookEntity.builder()
                 .isbn("24234-234-3")
                 .title("The ShadowA")
                 .authorEntity(authorEntity)
+                .build();
+    }
+
+    public static BookDto createTestBookDtoA(final AuthorDto author) {
+        return BookDto.builder()
+                .isbn("24234-234-3")
+                .title("The ShadowA")
+                .author(author)
                 .build();
     }
 

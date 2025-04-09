@@ -11,6 +11,6 @@ public interface AuthorRepository extends CrudRepository<AuthorEntity,Long> {
     Iterable<AuthorEntity> ageLessThan(int age);
 
     //JPA didn't understand this method name
-    @Query("SELECT a from AuthorEntity a where a.age>?1")
-    Iterable<AuthorEntity> findAuthorsWithAgeGreaterThan(int i);
+    @Query("SELECT a from AuthorEntity a where a.age > ?1")
+    Iterable<AuthorEntity> findAuthorsWithAgeGreaterThan(int age);
 }
