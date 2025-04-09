@@ -1,8 +1,8 @@
 package com.devtiroyoutube.spring.repositories;
 
 import com.devtiroyoutube.spring.TestDataUtil;
-import com.devtiroyoutube.spring.domain.Author;
-import com.devtiroyoutube.spring.domain.Book;
+import com.devtiroyoutube.spring.domain.entities.AuthorEntity;
+import com.devtiroyoutube.spring.domain.entities.BookEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,63 +17,63 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class BookRepositoryIntegrationTests {
+public class BookEntityRepositoryIntegrationTests {
 
     private final BookRepository underTest;
     private final AuthorRepository authorRepository;
 
     @Autowired
-    public BookRepositoryIntegrationTests(BookRepository underTest, AuthorRepository authorRepository) {
+    public BookEntityRepositoryIntegrationTests(BookRepository underTest, AuthorRepository authorRepository) {
         this.underTest = underTest;
         this.authorRepository = authorRepository;
     }
 
     @Test
     public void testThatBookCanBeCreatedAndRecalled() {
-        Author author = TestDataUtil.createTestAuthorA();
-        authorRepository.save(author);
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        authorRepository.save(authorEntity);
 
-        Book book = TestDataUtil.createTestBookA(author);
-        underTest.save(book);
+        BookEntity bookEntity = TestDataUtil.createTestBookA(authorEntity);
+        underTest.save(bookEntity);
 
-        Optional<Book> result = underTest.findById(book.getIsbn());
+        Optional<BookEntity> result = underTest.findById(bookEntity.getIsbn());
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(book);
+        assertThat(result.get()).isEqualTo(bookEntity);
     }
 
 
     @Test
     public void testThatMultipleBooksCanBeCreatedAndRecalled(){
-        Author author = TestDataUtil.createTestAuthorA();
-        authorRepository.save(author);
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        authorRepository.save(authorEntity);
 
-        Book bookA = TestDataUtil.createTestBookA(author);
-        Book bookB = TestDataUtil.createTestBookB(author);
-        Book bookC = TestDataUtil.createTestBookC(author);
-        underTest.save(bookA);
-        underTest.save(bookB);
-        underTest.save(bookC);
+        BookEntity bookEntityA = TestDataUtil.createTestBookA(authorEntity);
+        BookEntity bookEntityB = TestDataUtil.createTestBookB(authorEntity);
+        BookEntity bookEntityC = TestDataUtil.createTestBookC(authorEntity);
+        underTest.save(bookEntityA);
+        underTest.save(bookEntityB);
+        underTest.save(bookEntityC);
 
-        Iterable<Book> books = underTest.findAll();
+        Iterable<BookEntity> books = underTest.findAll();
         assertThat(books)
                 .hasSize(3)
-                .contains(bookA,bookB,bookC);
+                .contains(bookEntityA, bookEntityB, bookEntityC);
     }
 
     @Test
     public void testThatBookCanBeUpdated(){
-        Author author = TestDataUtil.createTestAuthorA();
-        authorRepository.save(author);
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        authorRepository.save(authorEntity);
 
-        Book bookA = TestDataUtil.createTestBookA(author);
-        underTest.save(bookA);
+        BookEntity bookEntityA = TestDataUtil.createTestBookA(authorEntity);
+        underTest.save(bookEntityA);
 
-        bookA.setTitle("Updated");
-        underTest.save(bookA);
+        bookEntityA.setTitle("Updated");
+        underTest.save(bookEntityA);
 
-        Optional<Book> result = underTest.findById(bookA.getIsbn());
+        Optional<BookEntity> result = underTest.findById(bookEntityA.getIsbn());
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(bookA);
+        assertThat(result.get()).isEqualTo(bookEntityA);
     }
 
 //    @Test

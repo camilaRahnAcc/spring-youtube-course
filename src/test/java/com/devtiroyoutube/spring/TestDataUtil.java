@@ -1,54 +1,54 @@
 package com.devtiroyoutube.spring;
 
-import com.devtiroyoutube.spring.domain.Author;
-import com.devtiroyoutube.spring.domain.Book;
+import com.devtiroyoutube.spring.domain.entities.AuthorEntity;
+import com.devtiroyoutube.spring.domain.entities.BookEntity;
 
 public final class TestDataUtil {
     private TestDataUtil(){
     }
 
-    public static Author createTestAuthorA() {
-        return Author.builder()
+    public static AuthorEntity createTestAuthorA() {
+        return AuthorEntity.builder()
                 .name("aaa")
                 .age(85)
                 .build();
     }
 
-    public static Author createTestAuthorB() {
-        return Author.builder()
+    public static AuthorEntity createTestAuthorB() {
+        return AuthorEntity.builder()
                 .name("bbb")
                 .age(60)
                 .build();
     }
 
-    public static Author createTestAuthorC() {
-        return Author.builder()
+    public static AuthorEntity createTestAuthorC() {
+        return AuthorEntity.builder()
                 .name("ccc")
                 .age(78)
                 .build();
     }
 
-    public static Book createTestBookA(final Author author) {
-        return Book.builder()
+    public static BookEntity createTestBookA(final AuthorEntity authorEntity) {
+        return BookEntity.builder()
                 .isbn("24234-234-3")
                 .title("The ShadowA")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
 
-    public static Book createTestBookB(final Author author) {
-        return Book.builder()
+    public static BookEntity createTestBookB(final AuthorEntity authorEntity) {
+        return BookEntity.builder()
                 .isbn("56567")
                 .title("The ShadowB")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
 
-    public static Book createTestBookC(final Author author) {
-        return Book.builder()
+    public static BookEntity createTestBookC(final AuthorEntity authorEntity) {
+        return BookEntity.builder()
                 .isbn("79879")
                 .title("The ShadowC")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
 }
