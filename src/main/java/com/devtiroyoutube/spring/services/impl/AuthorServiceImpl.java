@@ -1,5 +1,6 @@
 package com.devtiroyoutube.spring.services.impl;
 
+import com.devtiroyoutube.spring.domain.dto.AuthorDto;
 import com.devtiroyoutube.spring.domain.entities.AuthorEntity;
 import com.devtiroyoutube.spring.repositories.AuthorRepository;
 import com.devtiroyoutube.spring.services.AuthorService;
@@ -41,5 +42,21 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public boolean isExists(Long id) {
         return authorRepository.existsById(id);
+    }
+
+    @Override
+    public AuthorEntity partialUpdate(Long id, AuthorEntity authorEntity) {
+        authorEntity.setId(id);
+
+       return authorRepository.findById(id).map(existingAuthor ->{
+            Optional.ofNullable(authorEntity.getName()).ifPresent(existingAuthor::setName);
+            Optional.ofNullable(authorEntity.getAge()).ifPresent(existingAuthor::setAge);
+            return authorRepository.save(existingAuthor);
+        }).orElseThrow(()-> new RuntimeException("Author does not exist"));
+    }
+
+    @Override
+    public void delete(Long id) {
+        authorRepository.deleteById(id);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,7 +35,7 @@ public class AuthorController {
     public List<AuthorDto> listAuthors(){
        List<AuthorEntity> authors= authorService.findAll();
 
-      return authors.stream()
+        return authors.stream()
                .map(authorMapper::mapTo)
                .collect(Collectors.toList());
     }
@@ -70,5 +71,31 @@ public class AuthorController {
         AuthorDto authorDto1 = authorMapper.mapTo(savedAuthorEntity);
 
         return ResponseEntity.ok(authorDto1);
+    }
+
+    @PatchMapping("/authors/{id}")
+    public ResponseEntity<AuthorDto> partialUpdateAuthor(@PathVariable Long id, @RequestBody AuthorDto authorDto){
+
+        if(!authorService.isExists(id)){
+            return ResponseEntity.notFound().build();
+        }
+
+        AuthorEntity authorEntity = authorMapper.mapFrom(authorDto);
+        AuthorEntity updatedAuthor = authorService.partialUpdate(id, authorEntity);
+
+        return  new ResponseEntity<>(authorMapper.mapTo(updatedAuthor), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/authors/{id}")
+    public ResponseEntity<AuthorDto> deleteAuthor(@PathVariable Long id){
+        //still successful even if nothing was deleted.
+//        if(!authorService.isExists(id)){
+//            return ResponseEntity.notFound().build();
+//        }
+
+        authorService.delete(id);
+
+        return ResponseEntity.noContent().build();
+
     }
 }

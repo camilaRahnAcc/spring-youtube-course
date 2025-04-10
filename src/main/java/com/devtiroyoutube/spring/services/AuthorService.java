@@ -1,5 +1,6 @@
 package com.devtiroyoutube.spring.services;
 
+import com.devtiroyoutube.spring.domain.dto.AuthorDto;
 import com.devtiroyoutube.spring.domain.entities.AuthorEntity;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface AuthorService {
     Optional<AuthorEntity> findOne(Long id);
 
     boolean isExists(Long id);
+
+    AuthorEntity partialUpdate(Long id, AuthorEntity authorEntity);
+
+    void delete(Long id);
 }
